@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+
+  trustyfrontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.trustyfrontend.rule=Host(`trusty-talents-dev.esynergy.lv`)"
+      - "traefik.http.routers.trustyfrontend.entrypoints=websecure"
+      - "traefik.http.routers.trustyfrontend.tls=true"
+      - "traefik.http.services.trustyfrontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.trustyfrontend.service=trustyfrontend"
+    networks:
+      - src_all_network
+
+networks:
+  src_all_network:
+    external: true
